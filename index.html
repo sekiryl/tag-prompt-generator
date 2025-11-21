@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="google-site-verification" content="9cQ_KOhLVq-V2AzwtgYGsS25Fryroh5g0WKv5i_eSj4" />
+  <title>Tag Prompt Generator</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Tag based AI prompt generator">
+  <meta name="keywords" content="tag, prompt generator, ai art, tag generator, anime art">
+  <meta name="author" content="Your Name">
+
+  <!-- Standard favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="shortcut icon" href="assets/favicon/favicon.ico">
+
+  <!-- Apple Touch Icon (iOS Home screen icon) -->
+  <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
+
+  <!-- Android Chrome Icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+
+  <meta property="og:title" content="Tag Prompt Generator">
+  <meta property="og:description" content="Tag based AI prompt generator">
+  <meta property="og:type" content="website">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
+  <link id="theme-style" rel="stylesheet" href="./src/css/themes/sekiratte.css">
+  <link rel="stylesheet" href="./src/css/index.css">
+
+</head>
+<script src="./src/js/Sortable.min.js"></script>
+<body>
+  <div class="container">
+    <header>
+      <img src="./assets/images/logo.png" style="width: 5em; height: 5em;" alt="logo">
+      <h1>Tag Prompt Generator</h1>
+      <p>Tag based AI prompt generator</p>
+    </header>
+    
+    <!-- Fixed Settings Container -->
+    <div class="settings-container collapsed" id="settingsContainer">
+      <div class="settings-header" onclick="document.getElementById('settingsContainer').classList.toggle('collapsed')">
+        <h3><i class="fas fa-cog"></i> Settings</h3>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="settings-content">
+        <div class="settings-row">
+          <div class="toggle-container">
+            <label class="toggle-switch">
+              <input type="checkbox" id="descriptionToggle" checked>
+              <span class="slider"></span>
+            </label>
+            <span>Show Descriptions</span>
+          </div>
+        </div>
+        <div class="settings-row">
+          <button id="loadDefaultTags" class="load-tags-btn" onclick="loadDefaultTags()">
+            <i class="fas fa-download"></i> Load Default Tags
+          </button>
+          <label class="file-input-label">
+            <input type="file" id="tagsFileInput" accept=".json,.txt,.csv">
+            <i class="fas fa-file-import"></i> Load Custom Tags 
+          </label>
+        </div>
+        
+        <div class="settings-row">
+          <small style="color: var(--text-secondary); margin-top: 10px;">
+            <strong>Supported formats:</strong><br><br>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 200px;">
+                <strong>JSON:</strong><br>
+                <code style="display: block; background: var(--crust); padding: 8px; margin: 4px 0; border-radius: 4px; font-size: 11px;">
+{<br>
+&nbsp;&nbsp;"Category1": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{"tag": "tag1", "desc": "description1"},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{"tag": "tag2", "desc": "description2"}<br>
+&nbsp;&nbsp;]<br>
+}
+                </code>
+              </div>
+              <div style="flex: 1; min-width: 200px;">
+                <strong>TXT:</strong><br>
+                <code style="display: block; background: var(--crust); padding: 8px; margin: 4px 0; border-radius: 4px; font-size: 11px;">
+tag1<br>
+tag2<br>
+tag3
+                </code>
+              </div>
+              <div style="flex: 1; min-width: 200px;">
+                <strong>CSV:</strong><br>
+                <code style="display: block; background: var(--crust); padding: 8px; margin: 4px 0; border-radius: 4px; font-size: 11px;">
+tag1,2000<br>
+tag2,100<br>
+tag3,50
+                </code>
+              </div>
+            </div>
+          </small>
+        </div>
+        <div class="settings-row">
+          <label for="themeSelect">Theme</label>
+          <select id="themeSelect">
+            <option value="catppuccin_mocha">Catppuccin Mocha</option>
+            <option value="catppuccin_macchiato">Catppuccin Macchiato</option>
+            <option value="catppuccin_frappe">Catppuccin Frappe</option>
+            <option value="catppuccin_latte">Catppuccin Latte</option>
+            <option value="dracula">Dracula</option>
+            <option value="sekiratte">Sekiratte</option>
+            <option value="gruvbox_dark">Gruvbox Dark</option>
+            <option value="gruvbox_light">Gruvbox Light</option>
+            <option value="solarized_dark">Solarized Dark</option>
+            <option value="solarized_light">Solarized Light</option>
+            <option value="nord">Nord</option>
+            <option value="one_dark">One Dark</option>
+            <option value="tokyo_night">Tokyo Night</option>
+            <option value="vaporwave">Vaporwave</option>
+            <option value="cyberpunk">Cyberpunk</option>
+
+          </select>
+        </div>
+        <div class="settings-row">
+          <div class="toggle-container">
+            <label class="toggle-switch">
+              <input type="checkbox" id="customAccentToggle">
+              <span class="slider"></span>
+            </label>
+            <span>Custom Accent Color</span>
+          </div>
+        </div>
+        <div class="settings-row" id="accentColorRow" style="display: none;">
+          <label for="accentColor">Accent Color</label>
+          <input type="color" id="accentColorPicker">
+        </div>
+      </div>
+    </div>
+    <div class="saved-prompts-container collapsed" id="savedPromptsContainer">
+      <div class="saved-header" onclick="document.getElementById('savedPromptsContainer').classList.toggle('collapsed')">
+        <h3><i class="fas fa-bookmark"></i> Saved Prompts</h3>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="saved-content">
+        <div id="savedPromptsList"></div>
+      </div>
+    </div>
+    <div class="prompt-container">
+      <div id="tagContainer" class="tags-container"></div>
+      <div class="prompt-info">
+        <span>Tags: <span id="tagCount">0</span></span>
+        <span>Chars: <span id="charCount">0</span></span>
+      </div>
+      <div class="controls">
+        <button class="clear-btn" onclick="clearPrompt()"><i class="fas fa-trash"></i> Clear</button>
+        <button class="copy-btn" onclick="copyPrompt()"><i class="fas fa-copy"></i> Copy</button>
+        <input type="text" id="promptNameInput" placeholder="Prompt Name">
+        <button class="save-btn" onclick="savePrompt()"><i class="fas fa-save"></i> Save</button>
+      </div>
+      
+      <!-- Unified search/custom tag input -->
+      <div class="unified-input-container">
+          <h3>
+            <i class="fas fa-search"></i> Add Custom Tag or Search
+            <span class="shortcut-container">
+              <i class="fas fa-question-circle"></i>
+              <div class="shortcut-tooltip">
+                <ul>
+                  <li><kbd>←</kbd> / <kbd>→</kbd> Move Focus</li>
+                  <li><kbd>Shift</kbd> + <kbd>←</kbd> / <kbd>→</kbd> Move Focused Tag</li>
+                  <li><kbd>Backspace</kbd> Remove Focused Tag</li>
+                  <li><kbd>Ctrl</kbd> + <kbd>C</kbd> Copy Prompt</li>
+                </ul>
+              </div>
+            </span>
+          </h3>
+          <div class="unified-input-wrapper">
+            <input type="text" id="unifiedInput" placeholder="Type to search tags or add custom..." autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="none">
+            <div class="action-buttons">
+              <button 
+                onmousedown="event.preventDefault();" 
+                onclick="handleUnifiedAdd()"
+              ><i class="fas fa-plus"></i> Add</button>
+              <button 
+                onmousedown="event.preventDefault();" 
+                onclick="removeFocusedTag()" 
+                class="remove-btn"
+              ><i class="fas fa-delete-left"></i> Remove</button>
+            </div>
+          </div>
+        <div id="suggestionsDropdown" class="suggestions-dropdown"></div>
+      </div>
+    </div>
+    
+    <div class="categories-container" id="categories"></div>
+    <footer>Tag Prompt Generator • v3.1</footer>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+  
+  <script src="./src/js/index.js"></script>
+</body>
+</html>

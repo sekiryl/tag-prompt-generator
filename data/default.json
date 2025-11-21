@@ -1,0 +1,94 @@
+{
+  "Style": [
+    {
+      "tag": "realistic",
+      "desc": "Photorealistic style"
+    },
+    {
+      "tag": "anime",
+      "desc": "Anime art style"
+    },
+    {
+      "tag": "cartoon",
+      "desc": "Cartoon style"
+    },
+    {
+      "tag": "digital art",
+      "desc": "Digital artwork"
+    },
+    {
+      "tag": "oil painting",
+      "desc": "Oil painting style"
+    },
+    {
+      "tag": "watercolor",
+      "desc": "Watercolor painting"
+    }
+  ],
+  "Quality": [
+    {
+      "tag": "high quality",
+      "desc": "High quality image"
+    },
+    {
+      "tag": "masterpiece",
+      "desc": "Masterpiece quality"
+    },
+    {
+      "tag": "detailed",
+      "desc": "Highly detailed"
+    },
+    {
+      "tag": "sharp focus",
+      "desc": "Sharp and focused"
+    },
+    {
+      "tag": "4k",
+      "desc": "4K resolution"
+    }
+  ],
+  "Lighting": [
+    {
+      "tag": "soft lighting",
+      "desc": "Soft, diffused lighting"
+    },
+    {
+      "tag": "dramatic lighting",
+      "desc": "Strong, dramatic lighting"
+    },
+    {
+      "tag": "natural lighting",
+      "desc": "Natural light source"
+    },
+    {
+      "tag": "golden hour",
+      "desc": "Warm golden hour lighting"
+    },
+    {
+      "tag": "studio lighting",
+      "desc": "Professional studio lighting"
+    }
+  ],
+  "Colors": [
+    {
+      "tag": "vibrant colors",
+      "desc": "Bright, vibrant colors"
+    },
+    {
+      "tag": "muted colors",
+      "desc": "Soft, muted color palette"
+    },
+    {
+      "tag": "monochrome",
+      "desc": "Single color or black and white"
+    },
+    {
+      "tag": "warm colors",
+      "desc": "Warm color palette"
+    },
+    {
+      "tag": "cool colors",
+      "desc": "Cool color palette"
+    }
+  ]
+}
