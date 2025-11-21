@@ -7,7 +7,7 @@
 <p align="center">
   A sleek, lightweight tag-based prompt generator.<br>
   Built for artists and AI prompt engineers.<br>
-  <a href="https://tag-gen.vercel.app"><strong>🔗 Live Demo</strong></a>
+  <a href="https://prompt-gen.sekiryl.is-a.dev/"><strong>🔗 Live Demo</strong></a>
 </p>
 
 ---
