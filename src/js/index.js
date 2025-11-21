@@ -39,7 +39,11 @@
           toggleDescriptions(descriptionToggle.checked);
         } catch (e) {
           console.error("Error loading saved tags:", e);
+          loadDefaultTags(); // Load defaults if saved tags are corrupted
         }
+      } else {
+        // Load default tags if no saved tags exist
+        loadDefaultTags();
       }
 
       // Theme configuration
@@ -300,7 +304,7 @@
     
     // Load default tags
     function loadDefaultTags() {
-      fetch('../../data/default.json')
+      fetch('./data/default.json')
         .then(response => response.json())
         .then(data => {
           appTags = data;
@@ -443,7 +447,7 @@
         
         const header = document.createElement('div'); 
         header.className = 'category-header';
-        header.innerHTML = `<h2><i class="fas fa-folder"></i> ${cat}</h2>`;
+        header.innerHTML = `<h2>${cat}</h2>`;
         card.appendChild(header);
         
         const section = document.createElement('div'); 
