@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="assets/images/logo.png" width="100" alt="Danbooru Prompt Generator Logo">
+  <img src="assets/images/logo.png" width="100" alt="Tag Prompt Generator Logo">
 </p>
 
-<h1 align="center">Danbooru Prompt Helper</h1>
+<h1 align="center">Tag Prompt Generator</h1>
 
 <p align="center">
-  A sleek, lightweight Danbooru-style tag prompt generator.<br>
-  Built for artists, AI prompt engineers, and cultured degenerates™.<br>
-  <a href="https://danbooru-gen.vercel.app"><strong>🔗 Live Demo</strong></a>
+  A sleek, lightweight tag-based prompt generator.<br>
+  Built for artists and AI prompt engineers.<br>
+  <a href="https://prompt-gen.sekiryl.is-a.dev/"><strong>🔗 Live Demo</strong></a>
 </p>
 
 ---
@@ -29,27 +29,38 @@
 
 ## 🛠️ Getting Started
 
-Just clone the repo and open `index.html` in your browser:
+Just clone the repo and serve it with a local HTTP server:
 
 ```bash
-git clone https://github.com/chimera6174/danbooru-prompt-gen.git
-cd danbooru-prompt-gen
-xdg-open index.html  # or just double-click it
+git clone https://github.com/chimera6174/tag-prompt-gen.git
+cd tag-prompt-gen
+
+# Option 1: Python (most systems)
+python -m http.server 8000
+# or python3 -m http.server 8000
+
+# Option 2: Node.js (if you have it)
+npx serve .
+
+# Option 3: PHP (if you have it)
+php -S localhost:8000
 ```
 
-Everything works client-side, no installs, no build steps, no bullshit.
+Then open `http://localhost:8000` in your browser.
+
+**Note:** A local HTTP server is required to load tag files due to browser CORS policies. Simply opening `index.html` directly may cause loading errors.
 
 ---
 
 ## 📄 License
 
-Licensed under the [GNU GPL v3](LICENSE).  
+Licensed under the [GNU GPL v3](LICENSE).
 You are free to copy, modify, and redistribute as long as you keep it open-source.
 
 ---
 
 ## 👤 Credits
 
-- Inspired by tag-based prompt tools like Danbooru.
-- Built with vanilla HTML, CSS, and JavaScript by [chimera6174](https://github.com/chimera6174).
+- Inspired by various tag-based prompt tools and image generators.
+- Built with vanilla HTML, CSS, and JavaScript by [sekiryl](https://github.com/sekiryl).
 - [Sortable.js](https://github.com/sortablejs/sortable) for tag sorting.

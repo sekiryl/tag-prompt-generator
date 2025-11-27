@@ -39,7 +39,11 @@
           toggleDescriptions(descriptionToggle.checked);
         } catch (e) {
           console.error("Error loading saved tags:", e);
+          loadDefaultTags(); // Load defaults if saved tags are corrupted
         }
+      } else {
+        // Load default tags if no saved tags exist
+        loadDefaultTags();
       }
 
       // Theme configuration
@@ -54,41 +58,16 @@
       
       // Accent color configuration
       const accentColorPicker = document.getElementById('accentColorPicker');
-      const accentColorInput = document.getElementById('accentColorInput');
       
       // Set initial values
       const savedAccent = localStorage.getItem('accentColor');
       if (savedAccent) {
         setAccentColor(savedAccent);
-        accentColorInput.value = savedAccent;
         accentColorPicker.value = savedAccent;
-      } else {
-        const currentAccent = getCurrentAccentHex();
-        accentColorInput.placeholder = currentAccent;
       }
       
       accentColorPicker.addEventListener('input', function() {
-        accentColorInput.value = this.value;
         setAccentColor(this.value);
-      });
-      
-      accentColorInput.addEventListener('change', function() {
-        let value = this.value.trim();
-        if (value) {
-          if (!value.startsWith('#')) value = '#' + value;
-          if (value.length === 4) { // Expand short hex
-            value = '#' + value[1] + value[1] + value[2] + value[2] + value[3] + value[3];
-          }
-          if (value.match(/^#([0-9A-F]{6})$/i)) {
-            accentColorPicker.value = value;
-            setAccentColor(value);
-          }
-        } else {
-          // Clear override
-          document.documentElement.style.removeProperty('--accent');
-          localStorage.removeItem('accentColor');
-          accentColorInput.placeholder = getCurrentAccentHex();
-        }
       });
 
       // Set up event listeners
@@ -235,10 +214,40 @@
     
     // Set up event listeners
     function setupEventListeners() {
+      // Custom accent toggle
+      const customAccentToggle = document.getElementById('customAccentToggle');
+      const accentColorRow = document.getElementById('accentColorRow');
+      
+      customAccentToggle.addEventListener('change', function() {
+        accentColorRow.style.display = this.checked ? 'flex' : 'none';
+        localStorage.setItem('customAccentEnabled', this.checked);
+      });
+      
+      // Load custom accent setting
+      const customAccentEnabled = localStorage.getItem('customAccentEnabled') === 'true';
+      customAccentToggle.checked = customAccentEnabled;
+      accentColorRow.style.display = customAccentEnabled ? 'flex' : 'none';
+      
       // Description toggle
       descriptionToggle.addEventListener('change', function() {
+        if (this.checked && !descriptionsAvailable) {
+          // Prevent enabling descriptions for non-JSON formats
+          this.checked = false;
+          const currentFormat = getCurrentFormat();
+          showToast(`Descriptions are not supported with ${currentFormat.toUpperCase()}`);
+          return;
+        }
         localStorage.setItem('showDescriptions', this.checked);
         toggleDescriptions(this.checked);
+      });
+      
+      // Handle clicks on disabled toggle to show toast
+      const toggleContainer = descriptionToggle.closest('.toggle-container');
+      toggleContainer.addEventListener('click', function(e) {
+        if (!descriptionsAvailable) {
+          const currentFormat = getCurrentFormat();
+          showToast(`Descriptions are not supported with ${currentFormat.toUpperCase()}`);
+        }
       });
       
       // File input handler
@@ -295,7 +304,7 @@
     
     // Load default tags
     function loadDefaultTags() {
-      fetch('../../data/default.json')
+      fetch('./data/default.json')
         .then(response => response.json())
         .then(data => {
           appTags = data;
@@ -308,6 +317,29 @@
         .catch(error => {
           console.error('Error loading default tags:', error);
           showToast('Error loading tags', 'error');
+        });
+    }
+
+    function loadTagTags() {
+      fetch('./data/tag.json')
+        .then(res => res.json())
+        .then(array => {
+          // array is [ { tag: "...", description: "..." }, ... ]
+          const mapped = array.map(e => ({
+            tag: e.tag,
+            desc: e.description  // map "description" → "desc"
+          }));
+          // stick them in one category
+          appTags = { "Tag Tags": mapped };
+          descriptionsAvailable = true;        // now we have real descriptions
+          saveTagsToStorage('json');           // remember format
+          renderCategories();                  // rebuild UI
+          toggleDescriptions(descriptionToggle.checked);
+          showToast('Tag tags (with descriptions) loaded');
+        })
+        .catch(err => {
+          console.error('Error loading Tag JSON:', err);
+          showToast('Error loading Tag tags', 'error');
         });
     }
 
@@ -393,6 +425,20 @@
       reader.readAsText(file);
     }
     
+    // Get current data format
+    function getCurrentFormat() {
+      const savedTags = localStorage.getItem('customTags');
+      if (savedTags) {
+        try {
+          const parsed = JSON.parse(savedTags);
+          return parsed.format || 'json';
+        } catch (e) {
+          return 'json';
+        }
+      }
+      return 'json';
+    }
+    
     // Save tags to localStorage
     function saveTagsToStorage(format) {
       localStorage.setItem('customTags', JSON.stringify({
@@ -424,7 +470,7 @@
         
         const header = document.createElement('div'); 
         header.className = 'category-header';
-        header.innerHTML = `<h2><i class="fas fa-folder"></i> ${cat}</h2>`;
+        header.innerHTML = `<h2>${cat}</h2>`;
         card.appendChild(header);
         
         const section = document.createElement('div'); 
